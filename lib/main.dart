@@ -10,7 +10,6 @@ void main() {
 
 class Main extends StatefulWidget {
   const Main({super.key});
-
   @override
   State<Main> createState() => _MainState();
 }
@@ -19,7 +18,6 @@ class _MainState extends State<Main> {
   @override
   bool FinishOnboarding = false;
   void initState() {
-    // TODO: implement initState
     FinishOnBoarding();
     super.initState();
   }

@@ -55,6 +55,7 @@ class _QuranlistState extends State<Quranlist> {
                       MaterialPageRoute(
                         builder: (Builder) {
                           return Qurandetials(
+                            index: suras[index].Index - 1,
                             SuraAyat: suras[index].Venus,
                             SuraName: suras[index].ArName,
                           );
@@ -87,6 +88,7 @@ class _QuranlistState extends State<Quranlist> {
                     color: Colors.white,
                   ),
                 ),
+
                 leading: Stack(
                   alignment: Alignment(0, 0),
                   children: [

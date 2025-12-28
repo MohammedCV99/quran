@@ -14,29 +14,22 @@ class MostRecentView extends StatefulWidget {
 }
 
 class _MostRecentViewState extends State<MostRecentView> {
-  List<Quran> mostRecent = [];
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    loadMostRicent();
-  }
+  late Future<List<Quran>> _mostRecentFuture;
 
   @override
-  void didUpdateWidget(covariant MostRecentView oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-    loadMostRicent();
+  void initState() {
+    super.initState();
+    _mostRecentFuture = _loadMostRecent();
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(10.0),
+        // ===== TITLE =====
+        const Padding(
+          padding: EdgeInsets.all(10),
           child: Text(
             'Most Recently',
             style: TextStyle(
@@ -46,100 +39,126 @@ class _MostRecentViewState extends State<MostRecentView> {
             ),
           ),
         ),
-        //    SizedBox(height: 10),
+
+        // ===== LIST =====
         SizedBox(
           height: 150,
-          child: ListView.builder(
-            padding: EdgeInsets.only(left: 20),
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: 280,
-                child: Card(
-                  color: AppColors.goldColor,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 7,
-                      bottom: 7,
-                      right: 7,
-                      left: 20,
-                    ),
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: Text(
-                                  mostRecent[index].EnName,
+          child: FutureBuilder<List<Quran>>(
+            future: _mostRecentFuture,
+            builder: (context, snapshot) {
+              // Loading
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              // Empty state
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No recent Surahs',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+              }
+
+              final mostRecent = snapshot.data!;
+
+              return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.only(left: 20),
+                itemCount: mostRecent.length,
+                itemBuilder: (context, index) {
+                  final sura = mostRecent[index];
+
+                  return SizedBox(
+                    width: 280,
+                    child: Card(
+                      color: AppColors.goldColor,
+                      margin: const EdgeInsets.only(right: 12),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 7,
+                          bottom: 7,
+                          right: 7,
+                          left: 20,
+                        ),
+                        child: Stack(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                SizedBox(
+                                  width: 200,
+                                  child: Text(
+                                    sura.EnName,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      color: AppColors.blackColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  sura.ArName,
                                   style: TextStyle(
                                     fontSize: 24,
                                     color: AppColors.blackColor,
                                     fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                              ),
-                              Text(
-                                mostRecent[index].ArName,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  color: AppColors.blackColor,
-                                  fontWeight: FontWeight.bold,
+                                Text(
+                                  '${sura.AyaNumber} Verses',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColors.blackColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                '${mostRecent[index].AyaNumber} Verses',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColors.blackColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              bottom: 0,
+                              child: Image.asset(Imagesassets.suraCard),
+                            ),
+                          ],
                         ),
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          bottom: 0,
-                          child: Image.asset(Imagesassets.suraCard),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               );
             },
-            scrollDirection: Axis.horizontal,
-            itemCount: mostRecent.length,
           ),
         ),
       ],
     );
   }
 
-  loadMostRicent() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    List<String> data = pref.getStringList(Appkeys.MostRecentKey) ?? [];
+  // ===== LOAD MOST RECENT =====
+  Future<List<Quran>> _loadMostRecent() async {
+    final prefs = await SharedPreferences.getInstance();
+    final data = prefs.getStringList(Appkeys.MostRecentKey) ?? [];
+
     List<Quran> suras = [];
-    print('--->${data}');
-    for (int i = 0; i < data.length; i++) {
+
+    for (var value in data) {
+      final index = int.parse(value);
       suras.add(
         Quran(
-          quranList[int.parse(data[i])].Index,
-          quranList[int.parse(data[i])].Venus,
-          quranList[int.parse(data[i])].ArName,
-          quranList[int.parse(data[i])].EnName,
-          quranList[int.parse(data[i])].AyaNumber,
+          quranList[index].Index,
+          quranList[index].Venus,
+          quranList[index].ArName,
+          quranList[index].EnName,
+          quranList[index].AyaNumber,
         ),
       );
     }
-    setState(() {
-      mostRecent = suras.reversed.toList();
-    });
+
+    // Latest first
+    return suras.reversed.toList();
   }
 }

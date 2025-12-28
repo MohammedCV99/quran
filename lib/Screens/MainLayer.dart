@@ -5,6 +5,7 @@ import 'package:quran/Core/Colors/AppColors.dart';
 import 'package:quran/Core/HelperWidgets/common_decorations.dart';
 import 'package:quran/Screens/HadeethTab/MainScreen.dart';
 import 'package:quran/Screens/QurranTab/MainScreen.dart';
+import 'package:quran/Screens/RadioTab/RadioTab.dart';
 import 'package:quran/Screens/SabhaTab/SabhaTab.dart';
 
 class MainLayer extends StatefulWidget {
@@ -20,10 +21,11 @@ class _MainLayerState extends State<MainLayer> {
   int currentTab = 0;
   List<Widget> tabs = [
     Qurantab(),
-    HadeethTab(),
     Sabhatab(),
-    Container(color: Colors.green),
-    Container(color: Colors.pink),
+    HadeethTab(),
+
+    //  Radiotab(),
+    //Container(color: Colors.pink),
   ];
   @override
   Widget build(BuildContext context) {
@@ -66,12 +68,12 @@ class _MainLayerState extends State<MainLayer> {
                       ? CommonDecorations.selectedItemDecoration
                       : null,
               child: SvgPicture.asset(
-                Svgassets.hadeethIcon,
+                Svgassets.sebhaIcon,
                 width: currentTab == 1 ? 20 : 25,
                 color: currentTab == 1 ? Colors.white : null,
               ),
             ),
-            label: 'Hadeeth',
+            label: 'Sebha',
           ),
           BottomNavigationBarItem(
             icon: Container(
@@ -81,14 +83,15 @@ class _MainLayerState extends State<MainLayer> {
                       ? CommonDecorations.selectedItemDecoration
                       : null,
               child: SvgPicture.asset(
-                Svgassets.sebhaIcon,
+                Svgassets.hadeethIcon,
                 width: currentTab == 2 ? 20 : 25,
                 color: currentTab == 2 ? Colors.white : null,
               ),
             ),
-            label: 'Sebha',
+            label: 'Hadeeth',
           ),
-          BottomNavigationBarItem(
+
+          /*       BottomNavigationBarItem(
             icon: Container(
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
               decoration:
@@ -118,6 +121,7 @@ class _MainLayerState extends State<MainLayer> {
             ),
             label: 'Time',
           ),
+          */
         ],
       ),
     );
