@@ -15,4 +15,6 @@ class Imagesassets {
   static const String Screen3_IMG = "Assets/Images/Screen 3.png";
   static const String Screen4_IMG = "Assets/Images/Screen 4.png";
   static const String Screen5_IMG = "Assets/Images/Screen 5.png";
+  static const String Left_Sura_Name = "Assets/Images/Left.png";
+  static const String Right_Sura_Name = "Assets/Images/Right.png";
 }

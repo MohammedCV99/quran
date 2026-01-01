@@ -23,19 +23,4 @@ List<OnBoradingModel> OnBoradingData = [
     Title: AppConsts.Screen2_Title,
     SubTitle: AppConsts.Screen2_SubTitle,
   ),
-  OnBoradingModel(
-    IMGpath: Imagesassets.Screen3_IMG,
-    Title: AppConsts.Screen3_Title,
-    SubTitle: AppConsts.Screen3_SubTitle,
-  ),
-  OnBoradingModel(
-    IMGpath: Imagesassets.Screen4_IMG,
-    Title: AppConsts.Screen4_Title,
-    SubTitle: AppConsts.Screen4_SubTitle,
-  ),
-  OnBoradingModel(
-    IMGpath: Imagesassets.Screen5_IMG,
-    Title: AppConsts.Screen5_Title,
-    SubTitle: AppConsts.Screen5_SubTitle,
-  ),
 ];

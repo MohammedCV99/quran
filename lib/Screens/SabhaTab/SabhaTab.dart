@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:quran/Core/Assets/AppKeys.dart';
 import 'package:quran/Core/Assets/ConstAssets.dart';
@@ -16,6 +18,7 @@ class Sabhatab extends StatefulWidget {
 class _SabhatabState extends State<Sabhatab> {
   @override
   int count = 0;
+  String SebhaText = "سبحان الله";
 
   Widget build(BuildContext context) {
     return MainBgWidget(
@@ -49,7 +52,7 @@ class _SabhatabState extends State<Sabhatab> {
                 children: [
                   SizedBox(height: 100),
                   Text(
-                    "سبحان الله",
+                    SebhaText,
                     style: TextStyle(
                       color: AppColors.offWhiteColor,
                       fontFamily: AppConsts.fontFamily,
@@ -71,8 +74,21 @@ class _SabhatabState extends State<Sabhatab> {
               ),
             ),
             onTap: () {
+              count++;
               setState(() {
-                count++;
+                if (count >= 1 && count <= 33) {
+                  SebhaText = "سبحان الله";
+                  print("سبحه: $count");
+                } else if (count >= 34 && count <= 66) {
+                  SebhaText = "الحمد لله";
+                } else if (count >= 67 && count <= 99) {
+                  SebhaText = "الله أكبر";
+                } else if (count == 100) {
+                  SebhaText = "لا إله إلا الله";
+                } else if (count > 100) {
+                  count = 1;
+                  SebhaText = "سبحان الله";
+                }
               });
             },
           ),

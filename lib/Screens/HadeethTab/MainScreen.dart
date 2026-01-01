@@ -48,7 +48,7 @@ class _HadeethTabState extends State<HadeethTab> {
           itemBuilder: (context, index) {
             return Padding(
               padding: EdgeInsets.symmetric(
-                vertical: index != currantPAge ? 20.0 : 0,
+                vertical: index != currantPAge ? 40.0 : 20.0,
               ),
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 20, horizontal: 8),

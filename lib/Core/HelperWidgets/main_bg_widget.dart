@@ -25,7 +25,7 @@ class MainBgWidget extends StatelessWidget {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: SafeArea(child: Column(children: [MainHeader(), child])),
+        child: SafeArea(child: child),
       ),
     );
   }
