@@ -4,6 +4,7 @@ import 'package:quran/Core/Assets/SVGAssets.dart';
 import 'package:quran/Core/Colors/AppColors.dart';
 import 'package:quran/Core/HelperWidgets/common_decorations.dart';
 import 'package:quran/Screens/HadeethTab/MainScreen.dart';
+import 'package:quran/Screens/Qablia.dart';
 import 'package:quran/Screens/QurranTab/MainScreen.dart';
 import 'package:quran/Screens/RadioTab/RadioTab.dart';
 import 'package:quran/Screens/SabhaTab/SabhaTab.dart';
@@ -23,6 +24,7 @@ class _MainLayerState extends State<MainLayer> {
     Qurantab(),
     Sabhatab(),
     HadeethTab(),
+    QablaScreen(),
 
     //  Radiotab(),
     //Container(color: Colors.pink),
@@ -90,7 +92,21 @@ class _MainLayerState extends State<MainLayer> {
             ),
             label: 'Hadeeth',
           ),
-
+          BottomNavigationBarItem(
+            icon: Container(
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+              decoration:
+                  currentTab == 3
+                      ? CommonDecorations.selectedItemDecoration
+                      : null,
+              child: SvgPicture.asset(
+                "Assets/Images/compass.svg",
+                width: currentTab == 3 ? 20 : 25,
+                color: currentTab == 3 ? Colors.white : null,
+              ),
+            ),
+            label: 'Qablia',
+          ),
           /*       BottomNavigationBarItem(
             icon: Container(
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),

@@ -7,6 +7,7 @@ import 'package:quran/Core/AppData/Quran/Records/RecordData.dart';
 import 'package:quran/Core/Assets/ConstAssets.dart';
 import 'package:quran/Core/Assets/ImagesAssets.dart';
 import 'package:quran/Core/Colors/AppColors.dart';
+import 'package:quran/Screens/MainLayer.dart';
 import 'package:quran/Screens/QurranTab/Widgets/RecordPage.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -87,7 +88,6 @@ class _QurandetialsState extends State<Qurandetials> {
     super.dispose();
   }
 
-  // ================= UI =================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +95,14 @@ class _QurandetialsState extends State<Qurandetials> {
         backgroundColor: AppColors.blackColor,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: AppColors.goldColor),
-          onPressed: () => Navigator.pop(context),
+          onPressed:
+              () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (Builder) {
+                    return MainLayer();
+                  },
+                ),
+              ),
         ),
         actions: [
           IconButton(

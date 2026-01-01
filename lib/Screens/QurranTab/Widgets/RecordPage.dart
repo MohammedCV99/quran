@@ -22,7 +22,9 @@ class Recordpage extends StatefulWidget {
 class _RecordpageState extends State<Recordpage> {
   late AudioPlayer _player;
 
-  int? _currentPlayingIndex; // ⭐ highlighted ayah index
+  final ScrollController _scrollController = ScrollController();
+
+  int? _currentPlayingIndex;
 
   @override
   void initState() {
@@ -30,7 +32,7 @@ class _RecordpageState extends State<Recordpage> {
 
     _player = AudioPlayer();
 
-    // 🔁 When audio finishes → play next ayah automatically
+    // 🔁 Auto-play next ayah
     _player.onPlayerComplete.listen((event) {
       if (_currentPlayingIndex == null) return;
 
@@ -39,7 +41,6 @@ class _RecordpageState extends State<Recordpage> {
       if (nextIndex < widget.Audio.length) {
         _playAudio(nextIndex);
       } else {
-        // End of Surah
         setState(() {
           _currentPlayingIndex = null;
         });
@@ -49,6 +50,7 @@ class _RecordpageState extends State<Recordpage> {
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _player.dispose();
     super.dispose();
   }
@@ -60,10 +62,20 @@ class _RecordpageState extends State<Recordpage> {
       _currentPlayingIndex = index;
     });
 
+    // ✅ Auto-scroll to ayah
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          index * 70.0, // estimated item height
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+
     await _player.play(UrlSource(widget.Audio[index]));
   }
 
-  // ================= UI =================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,19 +93,15 @@ class _RecordpageState extends State<Recordpage> {
             const SizedBox(height: 10),
 
             // ===== SURAH NAME =====
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.SuraName,
-                  style: TextStyle(
-                    color: AppColors.goldColor,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            Text(
+              widget.SuraName,
+              style: TextStyle(
+                color: AppColors.goldColor,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+
             Divider(
               color: AppColors.goldColor.withOpacity(0.4),
               thickness: 1.5,
@@ -106,6 +114,7 @@ class _RecordpageState extends State<Recordpage> {
             // ===== AYAT LIST =====
             Expanded(
               child: ListView.builder(
+                controller: _scrollController,
                 itemCount: widget.Ayat.length,
                 itemBuilder: (context, index) {
                   final isPlaying = index == _currentPlayingIndex;
